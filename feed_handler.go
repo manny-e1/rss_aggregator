@@ -31,8 +31,18 @@ func (app *appConfig) createFeed(w http.ResponseWriter, r *http.Request, user da
 		UserID:    user.ID,
 	})
 	if err != nil {
-		respondWithError(w, 400, fmt.Sprintf("couldn't create user: %v", err))
+		respondWithError(w, 400, fmt.Sprintf("couldn't create feed: %v", err))
 		return
 	}
 	respondWithJSON(w, 201, dbFeedToCustomFeed(feed))
+}
+
+func (app *appConfig) getFeeds(w http.ResponseWriter, r *http.Request) {
+
+	feeds, err := app.DB.GetFeeds(r.Context())
+	if err != nil {
+		respondWithError(w, 400, fmt.Sprintf("couldn't get feeds: %v", err))
+		return
+	}
+	respondWithJSON(w, 201, dbFeedsToCustomFeeds(feeds))
 }

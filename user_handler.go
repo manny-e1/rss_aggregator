@@ -35,6 +35,5 @@ func (app *appConfig) createUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *appConfig) getUserByApiKey(w http.ResponseWriter, r *http.Request, user database.User) {
-
 	respondWithJSON(w, 201, dbUserToCustomUser(user))
 }
