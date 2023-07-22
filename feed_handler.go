@@ -10,9 +10,10 @@ import (
 	"github.com/manny-e1/rss_aggregator/internal/database"
 )
 
-func (app *appConfig) createUser(w http.ResponseWriter, r *http.Request) {
+func (app *appConfig) createFeed(w http.ResponseWriter, r *http.Request, user database.User) {
 	type Params struct {
 		Name string `json:"name"`
+		Url  string `json:"url"`
 	}
 	decoder := json.NewDecoder(r.Body)
 	params := Params{}
@@ -21,20 +22,17 @@ func (app *appConfig) createUser(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, 400, fmt.Sprintf("error parsing JSON: %v", err))
 		return
 	}
-	user, err := app.DB.CreateUser(r.Context(), database.CreateUserParams{
+	feed, err := app.DB.CreateFeed(r.Context(), database.CreateFeedParams{
 		ID:        uuid.New(),
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),
 		Name:      params.Name,
+		Url:       params.Url,
+		UserID:    user.ID,
 	})
 	if err != nil {
 		respondWithError(w, 400, fmt.Sprintf("couldn't create user: %v", err))
 		return
 	}
-	respondWithJSON(w, 201, dbUserToCustomUser(user))
-}
-
-func (app *appConfig) getUserByApiKey(w http.ResponseWriter, r *http.Request, user database.User) {
-
-	respondWithJSON(w, 201, dbUserToCustomUser(user))
+	respondWithJSON(w, 201, dbFeedToCustomFeed(feed))
 }

@@ -50,7 +50,8 @@ func main() {
 	v1Router := chi.NewRouter()
 	v1Router.Get("/healthz", checkHealth)
 	v1Router.Post("/users", app.createUser)
-	v1Router.Get("/users", app.getUserByApiKey)
+	v1Router.Get("/users", app.authMiddleware(app.getUserByApiKey))
+	v1Router.Post("/feeds", app.authMiddleware(app.createFeed))
 
 	router.Mount("/v1", v1Router)
 
