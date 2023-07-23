@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/manny-e1/rss_aggregator/internal/auth"
 	"github.com/manny-e1/rss_aggregator/internal/database"
 )
 
@@ -34,12 +35,16 @@ func (app *appConfig) createUser(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, 201, dbUserToCustomUser(user))
 }
 
-// func (app *appConfig) getUserByApiKey(w http.ResponseWriter, r *http.Request) {
-
-// 	user, err := app.DB.GetUserByApiKey(r.Context(),)
-// 	if err != nil {
-// 		respondWithError(w, 400, fmt.Sprintf("couldn't create user: %v", err))
-// 		return
-// 	}
-// 	respondWithJSON(w, 201, dbUserToCustomUser(user))
-// }
+func (app *appConfig) getUserByApiKey(w http.ResponseWriter, r *http.Request) {
+	apiKey, err := auth.GetApiKey(r.Header)
+	if err != nil {
+		respondWithError(w, 404, fmt.Sprintf("Auth error: %v", err))
+		return
+	}
+	user, err := app.DB.GetUserByApiKey(r.Context(), apiKey)
+	if err != nil {
+		respondWithError(w, 404, fmt.Sprint("user not found"))
+		return
+	}
+	respondWithJSON(w, 201, dbUserToCustomUser(user))
+}
