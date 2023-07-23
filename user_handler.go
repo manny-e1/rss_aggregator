@@ -33,3 +33,13 @@ func (app *appConfig) createUser(w http.ResponseWriter, r *http.Request) {
 	}
 	respondWithJSON(w, 201, dbUserToCustomUser(user))
 }
+
+// func (app *appConfig) getUserByApiKey(w http.ResponseWriter, r *http.Request) {
+
+// 	user, err := app.DB.GetUserByApiKey(r.Context(),)
+// 	if err != nil {
+// 		respondWithError(w, 400, fmt.Sprintf("couldn't create user: %v", err))
+// 		return
+// 	}
+// 	respondWithJSON(w, 201, dbUserToCustomUser(user))
+// }
