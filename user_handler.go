@@ -31,5 +31,5 @@ func (app *appConfig) createUser(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, 400, fmt.Sprintf("couldn't create user: %v", err))
 		return
 	}
-	respondWithJSON(w, 201, user)
+	respondWithJSON(w, 201, dbUserToCustomUser(user))
 }
