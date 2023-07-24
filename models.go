@@ -24,6 +24,14 @@ type Feed struct {
 	UserID    uuid.UUID `json:"userId"`
 }
 
+type FeedFollow struct {
+	Id        uuid.UUID `json:"id"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
+	FeedID    uuid.UUID `json:"feedId"`
+	UserID    uuid.UUID `json:"userId"`
+}
+
 func dbUserToCustomUser(dbUser database.User) User {
 	return User{
 		Id:        dbUser.ID,
@@ -51,4 +59,14 @@ func dbFeedsToCustomFeeds(dbFeeds []database.Feed) []Feed {
 		feeds = append(feeds, dbFeedToCustomFeed(feed))
 	}
 	return feeds
+}
+
+func dbFeedFollowToCustomFeedFollow(dbFeed database.FeedFollow) FeedFollow {
+	return FeedFollow{
+		Id:        dbFeed.ID,
+		CreatedAt: dbFeed.CreatedAt,
+		UpdatedAt: dbFeed.UpdatedAt,
+		FeedID:    dbFeed.FeedID,
+		UserID:    dbFeed.UserID,
+	}
 }
