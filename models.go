@@ -70,3 +70,11 @@ func dbFeedFollowToCustomFeedFollow(dbFeed database.FeedFollow) FeedFollow {
 		UserID:    dbFeed.UserID,
 	}
 }
+
+func dbFeedFollowsToCustomFeedFollows(dbFeedFollows []database.FeedFollow) []FeedFollow {
+	feedFollows := []FeedFollow{}
+	for _, feedFollow := range dbFeedFollows {
+		feedFollows = append(feedFollows, dbFeedFollowToCustomFeedFollow(feedFollow))
+	}
+	return feedFollows
+}

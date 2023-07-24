@@ -34,3 +34,12 @@ func (app *appConfig) createFeedFollow(w http.ResponseWriter, r *http.Request, u
 	}
 	respondWithJSON(w, 201, dbFeedFollowToCustomFeedFollow(feedFollow))
 }
+
+func (app *appConfig) getFeedFollows(w http.ResponseWriter, r *http.Request, user database.User) {
+	feedFollows, err := app.DB.GetFeedFollows(r.Context(), user.ID)
+	if err != nil {
+		respondWithError(w, 400, fmt.Sprintf("couldn't get feed follows: %v", err))
+		return
+	}
+	respondWithJSON(w, 201, dbFeedFollowsToCustomFeedFollows(feedFollows))
+}

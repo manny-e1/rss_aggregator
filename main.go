@@ -53,7 +53,8 @@ func main() {
 	v1Router.Get("/users", app.authMiddleware(app.getUserByApiKey))
 	v1Router.Post("/feeds", app.authMiddleware(app.createFeed))
 	v1Router.Get("/feeds", app.getFeeds)
-	v1Router.Post("/follow-feed", app.authMiddleware(app.createFeedFollow))
+	v1Router.Post("/follow-feeds", app.authMiddleware(app.createFeedFollow))
+	v1Router.Get("/follow-feeds", app.authMiddleware(app.getFeedFollows))
 
 	router.Mount("/v1", v1Router)
 
