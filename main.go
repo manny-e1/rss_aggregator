@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
@@ -34,8 +35,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("Can't connect to database: %v", err)
 	}
-
-	app := appConfig{DB: database.New(conn)}
+	db := database.New(conn)
+	app := appConfig{DB: db}
 
 	router := chi.NewRouter()
 	router.Use(cors.Handler(cors.Options{
@@ -64,6 +65,7 @@ func main() {
 		Addr:    ":" + PORT,
 	}
 	log.Printf("Server started listening on %v", srv.Addr)
+	startScraping(db, 10, 10*time.Minute)
 	if err := srv.ListenAndServe(); err != nil {
 		fmt.Println(err)
 	}
