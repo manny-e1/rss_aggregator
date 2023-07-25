@@ -42,7 +42,7 @@ func (app *appConfig) getFeedFollows(w http.ResponseWriter, r *http.Request, use
 		respondWithError(w, 400, fmt.Sprintf("couldn't get feed follows: %v", err))
 		return
 	}
-	respondWithJSON(w, 201, dbFeedFollowsToCustomFeedFollows(feedFollows))
+	respondWithJSON(w, 200, dbFeedFollowsToCustomFeedFollows(feedFollows))
 }
 
 func (app *appConfig) deleteFeedFollow(w http.ResponseWriter, r *http.Request, user database.User) {
@@ -60,7 +60,7 @@ func (app *appConfig) deleteFeedFollow(w http.ResponseWriter, r *http.Request, u
 		respondWithError(w, 400, fmt.Sprintf("couldn't unfollow feed: %v", err))
 		return
 	}
-	respondWithJSON(w, 201, struct {
+	respondWithJSON(w, 200, struct {
 		Message string `json:"message"`
 	}{Message: "success"})
 }

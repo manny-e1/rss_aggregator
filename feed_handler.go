@@ -44,5 +44,5 @@ func (app *appConfig) getFeeds(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, 400, fmt.Sprintf("couldn't get feeds: %v", err))
 		return
 	}
-	respondWithJSON(w, 201, dbFeedsToCustomFeeds(feeds))
+	respondWithJSON(w, 200, dbFeedsToCustomFeeds(feeds))
 }

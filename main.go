@@ -37,6 +37,7 @@ func main() {
 	}
 	db := database.New(conn)
 	app := appConfig{DB: db}
+	go startScraping(db, 10, 10*time.Minute)
 
 	router := chi.NewRouter()
 	router.Use(cors.Handler(cors.Options{
@@ -65,7 +66,6 @@ func main() {
 		Addr:    ":" + PORT,
 	}
 	log.Printf("Server started listening on %v", srv.Addr)
-	startScraping(db, 10, 10*time.Minute)
 	if err := srv.ListenAndServe(); err != nil {
 		fmt.Println(err)
 	}
