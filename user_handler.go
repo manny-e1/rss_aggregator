@@ -37,3 +37,16 @@ func (app *appConfig) createUser(w http.ResponseWriter, r *http.Request) {
 func (app *appConfig) getUserByApiKey(w http.ResponseWriter, r *http.Request, user database.User) {
 	respondWithJSON(w, 201, dbUserToCustomUser(user))
 }
+
+func (app *appConfig) getPostsForUser(w http.ResponseWriter, r *http.Request, user database.User) {
+	posts, err := app.DB.GetPostsForUser(r.Context(), database.GetPostsForUserParams{
+		UserID: user.ID,
+		Limit:  10,
+	})
+	if err != nil {
+		respondWithError(w, 500, fmt.Sprintf("couldn't get posts: %v", err))
+		return
+	}
+	respondWithJSON(w, 200, dbPostsToCustomPosts(posts))
+
+}

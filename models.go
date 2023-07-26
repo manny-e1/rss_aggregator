@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"time"
 
 	"github.com/google/uuid"
@@ -30,6 +31,17 @@ type FeedFollow struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 	FeedID    uuid.UUID `json:"feedId"`
 	UserID    uuid.UUID `json:"userId"`
+}
+
+type Post struct {
+	ID          uuid.UUID      `json:"id"`
+	CreatedAt   time.Time      `json:"createdAt"`
+	UpdatedAt   time.Time      `json:"updatedAt"`
+	Title       string         `json:"title"`
+	Description sql.NullString `json:"description"`
+	Url         string         `json:"url"`
+	PublishedAt time.Time      `json:"publishedAt"`
+	FeedID      uuid.UUID      `json:"feedId"`
 }
 
 func dbUserToCustomUser(dbUser database.User) User {
@@ -77,4 +89,25 @@ func dbFeedFollowsToCustomFeedFollows(dbFeedFollows []database.FeedFollow) []Fee
 		feedFollows = append(feedFollows, dbFeedFollowToCustomFeedFollow(feedFollow))
 	}
 	return feedFollows
+}
+
+func dbPostToCustomPost(dbPost database.Post) Post {
+	return Post{
+		ID:          dbPost.ID,
+		CreatedAt:   dbPost.CreatedAt,
+		UpdatedAt:   dbPost.UpdatedAt,
+		FeedID:      dbPost.FeedID,
+		PublishedAt: dbPost.PublishedAt,
+		Title:       dbPost.Title,
+		Url:         dbPost.Url,
+		Description: dbPost.Description,
+	}
+}
+
+func dbPostsToCustomPosts(dbPosts []database.Post) []Post {
+	posts := []Post{}
+	for _, post := range dbPosts {
+		posts = append(posts, dbPostToCustomPost(post))
+	}
+	return posts
 }
